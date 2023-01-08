@@ -1,13 +1,15 @@
 #include<stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #define LINE 256
 #define WORD 30
 
 void A(char[],char[]);
-void B(char[], char[]);
+void B(char * str);
 void get_task(char [],char []);
 void get_target(char[], char[]);
 int get_size(char *, char[]);
+int getWord(char w[]);
 int compare_words(char[], char []);
 int get_line_size(char*);
 
@@ -79,6 +81,23 @@ int get_line_size(char *line){
     return counter;
 }
 
+int getWord(char word[]){
+    char ch;
+    int count = 0;
+    for (int i = 0; 
+        ((i  < WORD ) &&
+            ((ch = getchar()) != EOF) &&
+            ( ch !='\n') &&
+            ( ch !='\t') &&
+            (ch != ' '));
+        ++i ){
+        word[i] = ch;
+        count++;
+    }
+    word[count] = '\0';
+    return count;
+}
+
 void A(char line[],char target[]){
     char *curr_char;
     curr_char = strstr(line, target);
@@ -87,26 +106,46 @@ void A(char line[],char target[]){
     }
 }
 
-void B(char line[], char target[]){
-    int size;
-    char *curr_char;
-    char word[WORD];     
-    curr_char = strchr(line, target[0]);
-    while(curr_char!=NULL){
-        size = get_size(curr_char, word);
-        if(size == strlen(target)+1){ 
-            if(compare_words(target,word)){
-                printf("%s\n", word);
+void B(char * target){
+    char word[WORD];
+
+    while(getWord(word)) {
+
+        int diff = 1;
+        int len_word = strlen(word); 
+        int len_target =strlen(target);
+        int enter=1;
+        if(abs(len_word - len_target) > diff)
+        {
+            enter=0;
+        }
+        int index_word = 0;
+        int index_target = 0;
+
+        while((index_word < len_word) && (index_target < len_target)) {
+            if (word[index_word] != target[index_target]) {
+                index_word++;
+                diff--;
+            } else {
+                index_word++;
+                index_target++;
             }
         }
-        else if(size == strlen(target)){            
-            if(!strcmp(target,word)){
-                printf("%s\n", word);
-            }         
+        if ((diff < 0) || ( (len_word - index_word) > diff))
+        {
+            enter=0;
         }
-        curr_char = strchr(curr_char+1, target[0]);
+
+        if(enter)
+        {
+            printf("%s\n",word);
+        }
     }
 }
+
+
+
+
 
 int main(){
     char curr_line[LINE];
@@ -127,7 +166,7 @@ int main(){
         }
 
         if(!(strcmp(task,b))&&(line_number!=0)){
-            B(curr_line, target);
+            B(target);
         }
         line_number++;
     }

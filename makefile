@@ -24,3 +24,8 @@ runtinputb:
 	./txtfind.o < find_inputb.txt
 
 .PHONY: clean all
+
+test:
+	valgrind --leak-check=full  --track-origins=yes --show-leak-kinds=all --error-exitcode=1 ./txtfind.o < find_inputa.txt
+	valgrind --leak-check=full  --track-origins=yes --show-leak-kinds=all --error-exitcode=1 ./txtfind.o < find_inputb.txt
+	valgrind --leak-check=full  --track-origins=yes --show-leak-kinds=all --error-exitcode=1 ./isort.o < sort_input.txt
