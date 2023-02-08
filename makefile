@@ -1,10 +1,10 @@
 CC = gcc
 FLAG = -Wall -g
 
-all: isort.o txtfind.o
+all: isort txtfind
 
-isort.o: isort.c
-	$(CC) $(FLAG) -o isort.o isort.c
+isort: isort.c
+	$(CC) $(FLAG) -o isort isort.c
 
 runi:
 	./isort.o < sort_input.txt
@@ -12,8 +12,8 @@ runi:
 clean:
 	rm -f ./isort.o ./txtfind.o
 
-txtfind.o: txtfind.c
-	$(CC) $(FLAG) -o txtfind.o txtfind.c
+txtfind: txtfind.c
+	$(CC) $(FLAG) -o txtfind txtfind.c
 
 runt: runtinputa runtinputb
 
